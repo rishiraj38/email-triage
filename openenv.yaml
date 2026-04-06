@@ -1,0 +1,79 @@
+name: email-triage
+version: "1.0.0"
+description: >
+  A real-world reinforcement learning environment where AI agents learn to
+  triage emails like a professional executive assistant. Agents must classify,
+  prioritize, and categorize a diverse inbox of 20 emails spanning spam,
+  urgent work situations, newsletters, notifications, and personal messages.
+  3 tasks of increasing difficulty from binary spam detection to full triage.
+
+author: "OpenEnv Hackathon Submission"
+license: "MIT"
+
+tags:
+  - openenv
+  - email
+  - triage
+  - nlp
+  - classification
+  - real-world
+  - productivity
+
+tasks:
+  - id: 1
+    name: "Spam Detection"
+    difficulty: easy
+    description: "Binary classification: spam or not spam."
+    reward_max: 1.0
+
+  - id: 2
+    name: "Priority Triage"
+    difficulty: medium
+    description: "Assign correct label and priority. Penalized for missing urgent emails."
+    reward_max: 1.0
+
+  - id: 3
+    name: "Full Email Triage"
+    difficulty: hard
+    description: "Assign label, priority, and category. Penalized for missed urgents and false spam."
+    reward_max: 1.0
+
+endpoints:
+  reset:    "POST /reset"
+  step:     "POST /step"
+  state:    "GET  /state"
+  health:   "GET  /health"
+  tasks:    "GET  /tasks"
+  grader:   "POST /grader"
+  baseline: "GET  /baseline"
+  docs:     "GET  /docs"
+
+observation_space:
+  email_id:          string
+  subject:           string
+  sender:            string
+  body:              string
+  timestamp:         string
+  step:              integer
+  total_emails:      integer
+  emails_remaining:  integer
+  reward:            float
+  cumulative_reward: float
+  done:              boolean
+
+action_space:
+  label:
+    type: string
+    values: [spam, inbox, urgent, archive, delete]
+  priority:
+    type: string
+    values: [high, medium, low]
+  category:
+    type: string
+    values: [spam, work, personal, newsletter, notification, social]
+
+deployment:
+  framework: fastapi
+  python: "3.11"
+  port: 7860
+  dockerfile: server/Dockerfile
