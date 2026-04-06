@@ -9,9 +9,9 @@ from openai import OpenAI
 # Configuration
 # ─────────────────────────────────────────────────────────────────────────────
 
-API_KEY = os.getenv("HF_TOKEN") or os.getenv("OPENAI_API_KEY")
-API_BASE_URL = os.getenv("API_BASE_URL") or "https://api.openai.com/v1"
-MODEL_NAME = os.getenv("MODEL_NAME") or "gpt-4o-mini"
+HF_TOKEN = os.getenv("HF_TOKEN")
+API_BASE_URL = os.getenv("API_BASE_URL", "https://api.openai.com/v1")
+MODEL_NAME = os.getenv("MODEL_NAME", "gpt-4o-mini")
 ENV_BASE_URL = os.getenv("ENV_BASE_URL", "http://localhost:7860")
 
 TASK_SYSTEM_PROMPTS = {
@@ -147,11 +147,11 @@ def run_task(task_id: int, llm_client: OpenAI):
     print(f"[END] success={success_str} steps={step} score={score:.2f} rewards={rewards_str}", flush=True)
 
 if __name__ == "__main__":
-    if not API_KEY:
-        print("ERROR: HF_TOKEN or OPENAI_API_KEY environment variable must be set.", file=sys.stderr)
+    if not HF_TOKEN:
+        print("ERROR: HF_TOKEN environment variable must be set.", file=sys.stderr)
         sys.exit(1)
 
-    llm_client = OpenAI(api_key=API_KEY, base_url=API_BASE_URL)
+    llm_client = OpenAI(api_key=HF_TOKEN, base_url=API_BASE_URL)
     
     try:
         h = requests.get(f"{ENV_BASE_URL}/health", timeout=10)
