@@ -151,8 +151,12 @@ if __name__ == "__main__":
         print("ERROR: HF_TOKEN environment variable must be set.", file=sys.stderr)
         sys.exit(1)
 
-    llm_client = OpenAI(api_key=HF_TOKEN, base_url=API_BASE_URL)
-    
+    try:
+        llm_client = OpenAI(api_key=HF_TOKEN, base_url=API_BASE_URL)
+    except Exception as e:
+        print(f"ERROR: Failed to initialize OpenAI client: {e}", file=sys.stderr)
+        sys.exit(1)
+
     try:
         h = requests.get(f"{ENV_BASE_URL}/health", timeout=10)
         h.raise_for_status()
