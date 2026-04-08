@@ -5,6 +5,10 @@ import sys
 import requests
 from openai import OpenAI
 
+# Clear proxy environment variables to prevent OpenAI client initialization errors
+for proxy_var in ("HTTP_PROXY", "HTTPS_PROXY", "http_proxy", "https_proxy", "REQUESTS_CA_BUNDLE"):
+    os.environ.pop(proxy_var, None)
+
 # ─────────────────────────────────────────────────────────────────────────────
 # Configuration
 # ─────────────────────────────────────────────────────────────────────────────
